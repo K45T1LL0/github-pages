@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escuela Conecta - Presentación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.6s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+
+        h1, h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            animation: slideInDown 1s ease-out;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #f0f0f0;
+            margin-bottom: 3rem;
+            text-align: center;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .content-grid {
+            display: grid;
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+        .grid-5 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .card-content {
+            color: #f0f0f0;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+        }
+
+        .user-card-1 { background: linear-gradient(135deg, #4834d4, #686de0); }
+        .user-card-2 { background: linear-gradient(135deg, #00d2d3, #54a0ff); }
+        .user-card-3 { background: linear-gradient(135deg, #ff9ff3, #f368e0); }
+        .user-card-4 { background: linear-gradient(135deg, #feca57, #ff9ff3); }
+
+        .func-card-1 { background: linear-gradient(135deg, #5f27cd, #341f97); }
+        .func-card-2 { background: linear-gradient(135deg, #00d2d3, #01a3a4); }
+        .func-card-3 { background: linear-gradient(135deg, #ff6348, #e17055); }
+        .func-card-4 { background: linear-gradient(135deg, #a55eea, #8854d0); }
+        .func-card-5 { background: linear-gradient(135deg, #26de81, #20bf6b); }
+
+        .architecture-diagram {
+            display: flex;
+            flex-direction: row; /* Default to horizontal */
+            justify-content: center; /* Center items horizontally */
+            align-items: center; /* Align items vertically */
+            gap: 1.5rem;
+            max-width: 1200px; /* Increased max-width for horizontal space */
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .layer {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+            color: white;
+            transition: all 0.3s ease;
+            max-width: 600px;
+        }
+
+        .layer:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .layer-1 { border-color: #ff6b6b; }
+        .layer-2 { border-color: #4ecdc4; }
+        .layer-3 { border-color: #45b7d1; }
+
+        .arrow {
+            font-size: 1.5rem;
+            color: #ffd700;
+            animation: none; /* Remove bounce for cleaner horizontal flow */
+            margin: 0 1rem; /* Add horizontal margin */
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            max-width: 100%;
+            padding: 0 1rem;
+        }
+
+        .tech-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tech-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+            margin-top: 2rem;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        .sound-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 6rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            z-index: 1000;
+        }
+
+        .sound-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            .subtitle { font-size: 1.2rem; }
+            .card { padding: 1.5rem; }
+            .grid-4, .grid-5 { grid-template-columns: 1fr; }
+            
+            /* Specific fixes for slides 9-13 */
+            .architecture-diagram {
+                flex-direction: column; /* Stack vertically on small screens */
+                gap: 1rem;
+                padding: 0 0.5rem;
+            }
+            
+            .layer {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .arrow {
+                font-size: 1.2rem;
+                transform: rotate(90deg); /* Rotate arrow to point down */
+                margin: 1rem 0; /* Add vertical margin */
+                animation: bounce 2s infinite; /* Re-enable bounce for vertical flow */
+            }
+            
+            .tech-stack {
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+            
+            .tech-item {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            /* Slide 11-12 specific adjustments */
+            .slide .content-grid {
+                gap: 1rem;
+            }
+            
+            .card-content {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+            
+            /* Conclusion slide adjustments */
+            .restart-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+                margin-top: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .slide {
+                padding: 1rem;
+            }
+            
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.4rem; }
+            .subtitle { font-size: 1rem; }
+            
+            .architecture-diagram {
+                gap: 0.8rem;
+            }
+            
+            .layer {
+                padding: 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .layer .card-title {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .tech-item {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.7rem;
+            }
+            
+            .restart-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            
+            .card-icon {
+                font-size: 1.8rem;
+                margin-bottom: 0.8rem;
+            }
+            
+            .card-title {
+                font-size: 1rem;
+                margin-bottom: 0.8rem;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .slide {
+                padding: 3rem;
+            }
+            
+            .content-grid {
+                max-width: 1400px;
+            }
+            
+            .architecture-diagram {
+                max-width: 1000px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="slide-counter" id="slideCounter">1 / 13</div>
+        <div class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊</div>
+
+        <div class="slide active">
+            <div class="card-icon">🏫</div>
+            <h1>Escuela Conecta</h1>
+            <div class="subtitle">Transformando la Comunicación Educativa</div>
+            <div class="subtitle">Una Solución Digital Integrada para Nuestra Institución</div>
+        </div>
+
+        <div class="slide">
+            <h2>Introducción a "Escuela Conecta"</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <div class="card-title">Sistema Integrado</div>
+                    <div class="card-content">"Escuela Conecta" es un sistema de comunicación escolar integrado que unifica todos los canales de información.</div>
+                </div>
+                <div class="card problem-card">
+                    <div class="card-icon">⚠️</div>
+                    <div class="card-title">Problema Principal</div>
+                    <div class="card-content">Falta de comunicación oportuna entre docentes y padres, dificultades para acceder a información actualizada, y dispersión de información en múltiples canales.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>¿Quiénes usarán "Escuela Conecta"?</h2>
+            <div class="content-grid grid-4">
+                <div class="card user-card-1">
+                    <div class="card-icon">👩‍🏫</div>
+                    <div class="card-title">Docentes</div>
+                    <div class="card-content">Comunicarse eficientemente con estudiantes y padres, enviar tareas, compartir calificaciones y coordinar actividades académicas.</div>
+                </div>
+                <div class="card user-card-2">
+                    <div class="card-icon">👨‍👩‍👧‍👦</div>
+                    <div class="card-title">Padres de Familia</div>
+                    <div class="card-content">Mantenerse informados sobre el progreso académico de sus hijos, eventos escolares y comunicaciones importantes.</div>
+                </div>
+                <div class="card user-card-3">
+                    <div class="card-icon">🎓</div>
+                    <div class="card-title">Estudiantes</div>
+                    <div class="card-content">Acceder a tareas, horarios y comunicarse con profesores (especialmente en secundaria).</div>
+                </div>
+                <div class="card user-card-4">
+                    <div class="card-icon">👔</div>
+                    <div class="card-title">Personal Administrativo</div>
+                    <div class="card-content">Gestionar comunicaciones masivas, generar informes y mantener actualizada la información institucional.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>¿Qué hará "Escuela Conecta"?</h2>
+            <div class="content-grid grid-5">
+                <div class="card func-card-1">
+                    <div class="card-icon">💬</div>
+                    <div class="card-title">Comunicación Directa</div>
+                    <div class="card-content">Mensajes directos a padres específicos o grupos</div>
+                </div>
+                <div class="card func-card-2">
+                    <div class="card-icon">📝</div>
+                    <div class="card-title">Gestión de Tareas</div>
+                    <div class="card-content">Publicación con fechas, descripciones y adjuntos</div>
+                </div>
+                <div class="card func-card-3">
+                    <div class="card-icon">🔔</div>
+                    <div class="card-title">Notificaciones Push</div>
+                    <div class="card-content">Alertas inmediatas sobre mensajes y eventos</div>
+                </div>
+                <div class="card func-card-4">
+                    <div class="card-icon">📅</div>
+                    <div class="card-title">Calendario Integrado</div>
+                    <div class="card-content">Eventos, reuniones y actividades escolares</div>
+                </div>
+                <div class="card func-card-5">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">Seguimiento Académico</div>
+                    <div class="card-content">Calificaciones, asistencia y observaciones</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Cimientos de "Escuela Conecta"</h2>
+            <div class="subtitle">Más Allá de las Funciones</div>
+            <div class="content-grid grid-3">
+                <div class="card" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                    <div class="card-icon">🛡️</div>
+                    <div class="card-title">Seguridad</div>
+                    <div class="card-content">Autenticación robusta, encriptación de datos sensibles y control de acceso basado en roles</div>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-title">Rendimiento</div>
+                    <div class="card-content">Respuesta en <strong>menos de 3 segundos</strong> para la mayoría de operaciones y soporte de <strong>500+ usuarios</strong> concurrentes</div>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #27ae60, #229954);">
+                    <div class="card-icon">☁️</div>
+                    <div class="card-title">Disponibilidad</div>
+                    <div class="card-content">Mínimo <strong>99.5%</strong> de disponibilidad, especialmente en horarios escolares críticos</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>La Base Física: Hardware para "Escuela Conecta"</h2>
+            <div class="content-grid grid-3">
+                <div class="card">
+                    <div class="card-icon">⌨️</div>
+                    <div class="card-title">Entrada</div>
+                    <div class="card-content">Teclados y ratones, pantallas táctiles, micrófonos y cámaras integradas</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🖥️</div>
+                    <div class="card-title">Salida</div>
+                    <div class="card-content">Monitores LCD, pantallas de dispositivos móviles, altavoces, impresoras, proyectores</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💾</div>
+                    <div class="card-title">Almacenamiento y Procesamiento</div>
+                    <div class="card-content">Servidores con SSD de alta capacidad, procesadores multinúcleo potentes, RAM suficiente</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>La Infraestructura Lógica: Software Base</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-icon">💻</div>
+                    <div class="card-title">Sistemas Operativos</div>
+                    <div class="card-content">Windows, macOS, iOS, Android (compatibilidad multiplataforma)</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🖥️</div>
+                    <div class="card-title">Servidores</div>
+                    <div class="card-content">Linux Ubuntu Server (estabilidad y seguridad)</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <div class="card-title">Navegadores Web</div>
+                    <div class="card-content">Chrome, Firefox, Safari (actualizados)</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🗄️</div>
+                    <div class="card-title">Bases de Datos y Seguridad</div>
+                    <div class="card-content">MySQL/PostgreSQL, antivirus, firewalls, sistemas de encriptación</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>El Corazón de "Escuela Conecta"</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <div class="card-title">Aplicación Principal</div>
+                    <div class="card-content">"EscuelaConecta" multiplataforma (web, iOS, Android) con panel de administración y notificaciones push</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⚙️</div>
+                    <div class="card-title">Funcionalidades Específicas</div>
+                    <div class="card-content">Comunicación bidireccional, gestión de tareas, calendario, calificaciones, informes</div>
+                </div>
+            </div>
+            <div class="tech-stack">
+                <div class="tech-item">React (Web)</div>
+                <div class="tech-item">React Native (Móvil)</div>
+                <div class="tech-item">Node.js + Express</div>
+                <div class="tech-item">MongoDB</div>
+                <div class="tech-item">Visual Studio Code</div>
+                <div class="tech-item">Git & Docker</div>
+                <div class="tech-item">AWS / Google Cloud</div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>La Estructura de "Escuela Conecta"</h2>
+            <div class="subtitle">Una Arquitectura Sólida</div>
+            <div class="architecture-diagram">
+                <div class="layer layer-1">
+                    <div class="card-icon">🎨</div>
+                    <div class="card-title">Capa de Presentación</div>
+                    <div class="card-content">Interfaces web responsive y apps móviles nativas</div>
+                </div>
+                <div class="arrow">⬇️</div>
+                <div class="layer layer-2">
+                    <div class="card-icon">⚙️</div>
+                    <div class="card-title">Capa de Lógica de Negocio</div>
+                    <div class="card-content">Node.js (autenticación, validación, mensajes, notificaciones)</div>
+                </div>
+                <div class="arrow">⬇️</div>
+                <div class="layer layer-3">
+                    <div class="card-icon">🗄️</div>
+                    <div class="card-title">Capa de Datos</div>
+                    <div class="card-content">MongoDB (usuarios, mensajes, tareas, eventos con respaldos automáticos)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Experiencia Intuitiva</h2>
+            <div class="subtitle">Diseño Centrado en el Usuario</div>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-icon">👩‍🏫</div>
+                    <div class="card-title">Interfaz para Docentes</div>
+                    <div class="card-content">Dashboard principal con mensajes recientes, tareas pendientes, acceso rápido a nuevas comunicaciones</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">👨‍👩‍👧‍👦</div>
+                    <div class="card-title">Interfaz para Padres</div>
+                    <div class="card-content">Vista simplificada enfocada en información de hijos (mensajes, tareas, calificaciones, eventos)</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <div class="card-title">Aplicación Móvil</div>
+                    <div class="card-content">Diseño de pestañas inferiores para navegar con una mano</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💻</div>
+                    <div class="card-title">Versión Web</div>
+                    <div class="card-content">Menú lateral plegable adaptable a diferentes tamaños de pantalla</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Del Concepto a la Realidad</h2>
+            <div class="subtitle">Implementación y Calidad</div>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-icon">⚙️</div>
+                    <div class="card-title">Módulos Principales</div>
+                    <div class="card-content">Autenticación y Autorización • Comunicación (mensajes, notificaciones) • Gestión Académica (tareas, calificaciones) • Eventos y Calendario • Informes</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🧪</div>
+                    <div class="card-title">Pruebas Principales</div>
+                    <div class="card-content">Funcionalidad básica • Carga (múltiples usuarios concurrentes) • Seguridad (autenticación, protección de datos) • Errores de funcionalidad, rendimiento e interfaz</div>
+                </div>
+            </div>
+            <div class="tech-stack">
+                <div class="tech-item">JavaScript (Lenguaje Principal)</div>
+                <div class="tech-item">React + TypeScript</div>
+                <div class="tech-item">MongoDB + Mongoose</div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>"Escuela Conecta" en Acción</h2>
+            <div class="subtitle">Despliegue y Evolución Continua</div>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-icon">👥</div>
+                    <div class="card-title">Distribución a Usuarios</div>
+                    <div class="card-content">Capacitación presencial para docentes/administrativos • Instrucciones de descarga y tutoriales para padres • Soporte inicial disponible</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">☁️</div>
+                    <div class="card-title">Infraestructura Técnica</div>
+                    <div class="card-content">Servidores en la nube escalables • Dispositivos con internet • Conexión estable • Administrador técnico institucional</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔄</div>
+                    <div class="card-title">Mantenimiento Continuo</div>
+                    <div class="card-content">Retroalimentación y análisis de uso • Actualizaciones menores y mayores • Compatibilidad con nuevas versiones</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⚠️</div>
+                    <div class="card-title">Posibles Desafíos</div>
+                    <div class="card-content">Problemas de conectividad • Errores de sincronización entre dispositivos • Adaptación de usuarios</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="card-icon">🌟</div>
+            <h1>El Futuro de la Comunicación Educativa</h1>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-icon">🚀</div>
+                    <div class="card-title">Transformación Integral</div>
+                    <div class="card-content">"Escuela Conecta" es una solución integral que transformará la comunicación educativa</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">Tecnología Moderna</div>
+                    <div class="card-content">Combina tecnologías modernas y diseño centrado en el usuario</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤝</div>
+                    <div class="card-title">Conexión Efectiva</div>
+                    <div class="card-content">Conectará efectivamente a docentes, estudiantes y padres en un entorno digital seguro</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📈</div>
+                    <div class="card-title">Evolución Continua</div>
+                    <div class="card-content">Implementación gradual, capacitación y mantenimiento continuo para la evolución de la plataforma</div>
+                </div>
+            </div>
+            <button class="restart-btn" onclick="restartPresentation()">🔄 Volver al Inicio</button>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn" onclick="previousSlide()">← Anterior</button>
+            <button class="nav-btn" onclick="nextSlide()">Siguiente →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateSlideCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function showSlide(n) {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === n) {
+                    slide.classList.add('active');
+                } else if (index < n) {
+                    slide.classList.add('prev');
+                }
+            });
+            updateSlideCounter();
+            updateProgressBar();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                initAudio(); // Initialize audio on first interaction
+                if (soundEnabled) {
+                    playNavigationSound();
+                }
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) {
+                initAudio(); // Initialize audio on first interaction
+                if (soundEnabled) {
+                    playNavigationSound();
+                }
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+        // Audio context and sound effects
+        let audioContext;
+        let soundEnabled = true;
+        // Initialize audio context (must be done after user interaction)
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Create sound effect using Web Audio API
+        function createTone(frequency, duration, type = 'sine') {
+            if (!soundEnabled || !audioContext) return;
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        // Different sound effects for different actions
+        function playNavigationSound() {
+            createTone(800, 0.2, 'sine'); // Higher pitch for navigation
+        }
+
+        function playHoverSound() {
+            createTone(600, 0.1, 'triangle'); // Mid pitch for hover
+        }
+
+        function playStartSound() {
+            // Pleasant chord progression for restart
+            createTone(523, 0.3); // C
+            setTimeout(() => createTone(659, 0.3), 100); // E
+            setTimeout(() => createTone(784, 0.4), 200); // G
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const soundToggle = document.getElementById('soundToggle');
+            soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+            if (soundEnabled) {
+                initAudio();
+                createTone(800, 0.2); // Test sound when enabling
+            }
+        }
+
+        function restartPresentation() {
+            initAudio();
+            if (soundEnabled) {
+                playStartSound();
+            }
+            currentSlide = 0;
+            showSlide(currentSlide);
+        }
+
+        // Touch/swipe support for mobile devices
+        let startX = 0;
+        let endX = 0;
+
+        document.addEventListener('touchstart', function(event) {
+            startX = event.touches[0].clientX;
+        });
+        document.addEventListener('touchend', function(event) {
+            endX = event.changedTouches[0].clientX;
+            handleSwipe();
+        });
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = startX - endX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide(); // Swipe left - next slide
+                } else {
+                    previousSlide(); // Swipe right - previous slide
+                }
+            }
+        }
+
+        // Auto-animate cards on slide change
+        function animateCards() {
+            const activeSlide = document.querySelector('.slide.active');
+            const cards = activeSlide.querySelectorAll('.card');
+            
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'none';
+                setTimeout(() => {
+                    card.style.animation = 'fadeInUp 0.8s ease-out both';
+                }, 10);
+            });
+        }
+
+        // Enhanced slide transition with card animations
+        function showSlide(n) {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === n) {
+                    slide.classList.add('active');
+                } else if (index < n) {
+                    slide.classList.add('prev');
+                }
+            });
+            updateSlideCounter();
+            updateProgressBar();
+            setTimeout(animateCards, 300);
+        }
+
+        // Add click-to-expand functionality for cards with detailed info
+        document.addEventListener('click', function(event) {
+            const card = event.target.closest('.card');
+            if (card && card.querySelector('.card-content')) {
+                const content = card.querySelector('.card-content');
+                const isExpanded = card.classList.contains('expanded');
+ 
+                
+                // Remove expanded class from all cards
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('expanded'));
+                
+                if (!isExpanded) {
+                    card.classList.add('expanded');
+                }
+            }
+        });
+        // Add fullscreen toggle
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Add fullscreen button
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'nav-btn';
+        fullscreenBtn.style.position = 'fixed';
+        fullscreenBtn.style.top = '2rem';
+        fullscreenBtn.style.left = '2rem';
+        fullscreenBtn.innerHTML = '⛶';
+        fullscreenBtn.onclick = toggleFullscreen;
+        document.body.appendChild(fullscreenBtn);
+        // Initialize
+        updateSlideCounter();
+        updateProgressBar();
+        animateCards();
+        // Add CSS for expanded cards
+        const style = document.createElement('style');
+        style.textContent = `
+            .card.expanded {
+                transform: scale(1.05) !important;
+                z-index: 100;
+                background: rgba(255, 255, 255, 0.25) !important;
+                box-shadow: 0 25px 50px rgba(0,0,0,0.3) !important;
+            }
+            
+            .card.expanded .card-content {
+                font-size: 1.1em;
+                line-height: 1.8;
+            }
+            
+            @media (max-width: 480px) {
+                .nav-btn {
+                    padding: 0.6rem 1rem;
+                    font-size: 0.9rem;
+                }
+                
+                .card {
+                    padding: 1rem;
+                }
+                
+                .card-icon {
+                    font-size: 2rem;
+                }
+                
+                .card-title {
+                    font-size: 1.1rem;
+                }
+                
+                .tech-item {
+                    padding: 0.6rem 1rem;
+                    font-size: 0.9rem;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
